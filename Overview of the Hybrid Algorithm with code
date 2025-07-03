@@ -1,0 +1,148 @@
+Overview of the Hybrid Algorithm
+You are solving a complex multi-objective optimization problem using three stages:
+
+Teacher Phase (TLBO)
+
+Particle Swarm Optimization (PSO) Phase
+
+Learner Phase (TLBO)
+
+This approach balances exploration (finding new areas of solution space) and exploitation (refining good solutions).
+
+🧮 Initialization
+matlab
+Copy
+Edit
+clc; clear all;
+Set constants for PSO:
+
+wmax, wmin: inertia weights (balance exploration & convergence)
+
+c1, c2: acceleration coefficients (how much particle learns from itself and others)
+
+Define lower bound (lb) and upper bound (ub) of variables:
+
+The first values are location indices for EVCS and DGs.
+
+The later values are DG sizes (complex numbers).
+
+matlab
+Copy
+Edit
+ns = 100;   % number of particles (solutions)
+nv = number of decision variables (20)
+Randomly initialize solutions and convert to real parameter values using convert_pv.
+
+🧮 Objective Function Evaluation
+matlab
+Copy
+Edit
+obj = evuci1(pv);
+Calls your custom function evuci1 to compute:
+
+EV Consumer Cost Index (EVCCI)
+
+Power Loss Index
+
+Combines both into a single fitness value (obj) using weights w1, w2.
+
+🧑‍🏫 1. TEACHER PHASE (TLBO)
+matlab
+Copy
+Edit
+[tpvobj] = teacherh(pvobj, lb, ub);
+Learns from the best solution in the population (teacher).
+
+Updates population based on how far students are from the teacher.
+
+This helps quickly improve solutions with better convergence.
+
+🐦 2. PARTICLE SWARM OPTIMIZATION (PSO)
+⚙️ Initial Setup:
+matlab
+Copy
+Edit
+vel = 0.1 * pv;
+pbest = pv;         % best position seen by each particle
+gbest = pv(best);   % best global solution
+🔁 Main PSO Update Loop:
+matlab
+Copy
+Edit
+for i = 1:ns
+  for j = 1:nv
+    vel(i,j) = ...
+    pv(i,j) = ...
+Updates position and velocity of each solution based on:
+
+Its personal best (pbest)
+
+The global best (gbest)
+
+Random learning factors
+
+Velocity and position are bounded by limits defined by lb and ub.
+
+🎯 Update Best Solutions:
+matlab
+Copy
+Edit
+if f1 < f0
+  pbest(i,:) = pv(i,:);
+  f0 = f1;
+end
+Updates personal and global bests based on new evaluations.
+
+🔀 Combine Both Phases
+matlab
+Copy
+Edit
+btp = top half from TLBO
+bpso = top half from PSO
+finres = [btp; bpso]
+Takes the best 50% of solutions from both TLBO (teacher) and PSO stages.
+
+Combines them into a new population for the next phase.
+
+👨‍🎓 3. LEARNER PHASE (TLBO)
+matlab
+Copy
+Edit
+[lpvobj] = learner1(finres, lb, ub);
+Each solution learns from another randomly selected solution.
+
+Improves the population without using global best explicitly.
+
+Aims to refine the population further.
+
+🔁 Stopping Criteria
+matlab
+Copy
+Edit
+alpha = min(abs(fpres - fprev));
+if alpha < tol: stop
+The loop stops when the improvement in fitness becomes very small (tol).
+
+Stores the best solution in bst.
+
+✅ What Your Code Achieves
+Phase	Purpose
+Teacher Phase (TLBO)	Guides solutions towards best individual
+PSO Phase	Adds exploration and memory-based learning
+Learner Phase (TLBO)	Encourages peer-to-peer learning to refine solutions
+
+Together, these stages ensure:
+
+Faster convergence
+
+Avoid getting stuck in local optima
+
+Balanced exploration & exploitation
+
+🗂 Final Output
+matlab
+Copy
+Edit
+finres – Best solutions from TLBO and PSO
+srt1 – Sorted results after learner phase
+bst – Best solution found
