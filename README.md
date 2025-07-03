@@ -101,111 +101,61 @@ Slightly higher computation time for large networks due to dual-phase optimizati
 Designed for radial distribution networks (RDN) – extension to meshed systems requires further work.
 
 
-Algorithm for All Cases (Step-by-Step)
+#### Algorithm for All Cases (Step-by-Step)
 ### Base Case – No EVCS or DG
-Goal: Analyze the network performance without any charging stations or distributed generation.
-
+# Goal: Analyze the network performance without any charging stations or distributed generation.
 Steps:
-
 Load the IEEE 33-bus distribution network data.
-
 Perform load flow analysis using the backward/forward sweep method.
-
 Record:
-
 Active Power Loss (APL)
-
 Reactive Power Loss (RPL)
-
 Minimum Bus Voltage
 
 ### Case 1 – EVCS Placement Only
-Goal: Minimize power loss and EV travel cost by placing only EV Charging Stations.
-
+# Goal: Minimize power loss and EV travel cost by placing only EV Charging Stations.
 Steps:
-
 Load both distribution network and road network data.
-
 Define the Multi-Objective Function (MOF) using:
-
 EV Consumer Cost Index (EVCCI)
-
 Active Power Loss Index (APLI)
-
 Initialize the MWTLB-PSA algorithm:
-
 Generate initial population of EVCS locations and sizes.
-
 For each iteration:
-
 Evaluate fitness using MOF.
-
 Update solution using hybrid WTLBO + PSO rules.
-
 Stop when convergence criteria met.
-
 Output optimal EVCS locations, capacities, and corresponding:
-
 APL
-
 EVCCI
-
 Minimum voltage
-
 ### Case 2 – DG Placement After EVCS
-Goal: Improve voltage profile and reduce power loss after EVCS are placed.
-
+# Goal: Improve voltage profile and reduce power loss after EVCS are placed.
 Steps:
-
 Use optimal EVCS locations from Case 1.
-
 Initialize the MWTLB-PSA for DG placement.
-
 Define limits for DG sizes and power constraints.
-
 Optimize:
-
 DG locations and sizes.
-
 Combined MOF with EVCCI and APLI.
-
 Update load flow with both EVCS and DG data.
-
-Record:
-
+# Record:
 Reduced APL and RPL
-
 Improved voltage profile
-
 EVCCI remains same
-
 ### Case 3 – Simultaneous Placement of EVCS and DG
-Goal: Jointly optimize the placement and sizing of EVCS and DGs for best performance.
-
+# Goal: Jointly optimize the placement and sizing of EVCS and DGs for best performance.
 Steps:
-
 Load distribution and road network data.
-
 Set constraints for:
-
 EVCS capacities, limits
-
 DG size limits
-
 Voltage and power balance
-
 Initialize MWTLB-PSA with mixed population (EVCS + DG).
-
 Evaluate MOF with both EVCCI and APLI.
-
 Run the algorithm until convergence.
-
-Output:
-
+# Output:
 Best EVCS and DG placements
-
 APL, RPL, EVCCI
-
 Minimum bus voltage
-
 Installation cost
