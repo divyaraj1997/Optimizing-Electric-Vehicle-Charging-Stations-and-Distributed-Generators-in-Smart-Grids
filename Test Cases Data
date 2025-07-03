@@ -56,7 +56,7 @@ This data is foundational for developing a **traffic-aware multi-objective optim
 
 
  able: 25-Node Traffic Network — Node Distances and Weight Characteristics
-From Node (Fn)	To Node (Tn)	Distance (km)	1/km	Flow Weight (Wf)	Traffic Weight(wt)
+From Node (Fn)	To Node (Tn)	Distance (km)	1/km	Flow Weight (Wf)	Traffic Weight(wt),  From Node (Fn)	To Node (Tn)	Distance (km)	1/km	Flow Weight (Wf)	Traffic Weight(wt)
 1	2	40	0.54	0.8	11	13	30	0.05	0.05
 1	5	50	0.54	0.27	11	16	70	0.05	0.27
 2	3	30	0.8	0.27	11	12	20	0.05	0.54
