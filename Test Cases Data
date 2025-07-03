@@ -40,4 +40,43 @@ from bus	to bus	Rpu	Xpu	Z pu	 	load
 30	31	0.608	0.6008	0.854766	 	150	70	 
 31	32	0.1937	0.2258	0.297498	 	210	100	 
 32	33	0.2128	0.3308	0.393335	 	60	40	 
-				17.24379	 	 	 	 
+					 	 	 	 
+
+
+
+This table presents the **25-node traffic network**, showing the distances between origin-destination node pairs and their corresponding weight characteristics. 
+Each row indicates a connection between two nodes $F_n$ (from-node) and $T_n$ (to-node), along with the **travel distance** (in km), and two weight values: $W_f$ and $W_t$. 
+The parameter $1/\text{km}$ indicates the reciprocal of distance, used in optimization models to represent proximity influence. 
+The **weights** $W_f$ and $W_t$ correspond to **flow importance** and **traffic density** or priority, respectively. 
+Higher weights indicate **more frequently used or critical paths**.
+These weights are essential for traffic-aware planning of Electric Vehicle Charging Stations (EVCS), as they reflect how likely a route is used.
+The table enables integration between the **Transportation Network (TN)** and the **Distribution Network (DN)** by helping identify key nodes with **both high traffic flow and grid support potential**. 
+This data is foundational for developing a **traffic-aware multi-objective optimization model**.
+
+
+
+ able: 25-Node Traffic Network — Node Distances and Weight Characteristics
+From Node (Fn)	To Node (Tn)	Distance (km)	1/km	Flow Weight (Wf)	Traffic Weight(wt)
+1	2	40	0.54	0.8	11	13	30	0.05	0.05
+1	5	50	0.54	0.27	11	16	70	0.05	0.27
+2	3	30	0.8	0.27	11	12	20	0.05	0.54
+2	4	40	0.8	0.27	12	15	40	0.54	0.27
+3	4	40	0.27	0.27	12	16	40	0.54	0.27
+3	9	40	0.27	0.27	13	14	70	0.05	0.54
+4	9	70	0.27	0.27	13	19	40	0.05	0.8
+4	8	50	0.27	0.54	14	19	70	0.54	0.8
+4	7	50	0.27	0.05	14	21	20	0.54	0.27
+4	5	30	0.27	0.27	14	22	40	0.54	0.54
+5	6	50	0.27	0.07	15	16	40	0.27	0.27
+5	7	50	0.27	0.05	16	17	40	0.27	0.27
+6	7	30	0.07	0.05	17	18	30	0.27	1.07
+7	8	30	0.05	0.54	17	19	30	0.27	0.8
+7	11	80	0.05	0.05	18	20	30	1.07	0.27
+7	12	90	0.05	0.54	19	20	30	0.8	0.27
+8	9	60	0.54	0.27	20	21	20	0.27	0.27
+8	10	60	0.54	0.54	21	14	20	0.27	0.54
+8	11	70	0.54	0.05	21	20	20	0.27	0.27
+8	13	70	0.54	0.05	22	23	30	0.54	0.05
+9	10	60	0.27	0.54	23	24	30	0.05	1.34
+10	13	60	0.54	0.05	24	25	80	1.34	0.05
+10	14	30	0.54	0.54	25	24	80	0.05	1.34
