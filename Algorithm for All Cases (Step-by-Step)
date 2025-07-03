@@ -1,107 +1,124 @@
-### Base Case – No EVCS or DG
-Goal: Analyze the network performance without any charging stations or distributed generation.
+MATLAB code explained in simple and easy terms step-by-step with what each part does.
 
-Steps:
+✅ Function Name and Inputs
+matlab
+Copy
+Edit
+function [obj] = evuci1(pv)
+Function name: evuci1
 
-Load the IEEE 33-bus distribution network data.
+Input: pv — a matrix where:
 
-Perform load flow analysis using the backward/forward sweep method.
+pv(:,1:4) = location of EVCS and DGs (rounded to nearest integer)
 
-Record:
+pv(:,5:8) = size (rating) of DGs
 
-Active Power Loss (APL)
+📍Part 1: Initialization
+matlab
+Copy
+Edit
+ns = size(pv,1);  % number of candidate solutions (rows in input)
+obj = zeros(ns,1); % initialize the objective value array
+best_w1 = zeros(ns,1); % (not used now)
+best_w2 = zeros(ns,1); % (not used now)
 
-Reactive Power Loss (RPL)
+evloc = round(pv(:,1:4)); % EVCS locations
+loc = round(pv(:,1:4));   % DG locations
+rat = round(pv(:,5:8));   % DG ratings
+🚗 Part 2: EV Consumer Cost Index (EVCCI) Calculation
+matlab
+Copy
+Edit
+evd = load('EV_data.m');  % load EV demand data
+rn = evd(:,1);     % road node numbers
+nev = evd(:,2);    % number of EVs at each node
+dmin = evd(:,3);   % min travel distance to EVCS
+dmax = evd(:,4);   % max travel distance to EVCS
+➕ Then calculates:
+matlab
+Copy
+Edit
+evucimin = dmin(evloc(:,1))*nev(evloc(:,1))*0.219*87700 + ...
+           dmin(evloc(:,2))*nev(evloc(:,2))*0.219*87700 + ...
+           dmin(evloc(:,3))*nev(evloc(:,3))*0.219*87700 + ...
+           dmin(evloc(:,4))*nev(evloc(:,4))*0.219*87700;
 
-Minimum Bus Voltage
+evucimax = dmax(evloc(:,1))*nev(evloc(:,1))*0.219*87700 + ...
+           dmax(evloc(:,2))*nev(evloc(:,2))*0.219*87700 + ...
+           dmax(evloc(:,3))*nev(evloc(:,3))*0.219*87700 + ...
+           dmax(evloc(:,4))*nev(evloc(:,4))*0.219*87700;
 
-### Case 1 – EVCS Placement Only
-Goal: Minimize power loss and EV travel cost by placing only EV Charging Stations.
+obj1 = evucimin ./ evucimax;  % normalized consumer inconvenience index
+📌 This gives us how inconvenient (cost-wise) it is for EV users to reach a charging station.
 
-Steps:
+⚡ Part 3: Real Power Loss Index (RPLI)
+matlab
+Copy
+Edit
+LD = load('linedata33.m');  % line data (from bus, to bus, resistance, reactance)
+BD = load('busdata_33.m');  % bus data (bus no, Pd, Qd)
+➕ Modify bus data to add DG generation at selected buses:
+matlab
+Copy
+Edit
+BD(loc(:,i),2) = BD(loc(:,i),2) - real(rat(:,i));  % reduce real demand
+BD(loc(:,i),3) = BD(loc(:,i),3) - imag(rat(:,i));  % reduce reactive demand
+(Repeated for i = 1 to 4)
 
-Load both distribution network and road network data.
+🔌 Add EVCS Load:
+matlab
+Copy
+Edit
+BD(evloc(1,1),2) = BD(evloc(1,1),2) + 345.6;
+BD(evloc(1,2),2) = BD(evloc(1,2),2) + 400;
+BD(evloc(1,3),2) = BD(evloc(1,3),2) + 115.2;
+BD(evloc(1,4),2) = BD(evloc(1,4),2) + 230.4;
+✅ This means you're simulating both DG generation and EVCS loads in the system.
 
-Define the Multi-Objective Function (MOF) using:
+📐 Part 4: Convert to Per Unit System (PU)
+matlab
+Copy
+Edit
+MVAb = 100;
+KVb = 12.66;
+Zb = (KVb^2)/MVAb;
 
-EV Consumer Cost Index (EVCCI)
+Rpu = R/Zb;
+Xpu = X/Zb;
+Ppu = Pd/(1000 * MVAb);
+Qpu = Qd/(1000 * MVAb);
+✅ PU system simplifies calculations in power systems by normalizing values.
 
-Active Power Loss Index (APLI)
+🔄 Part 5: Load Flow using Backward/Forward Sweep
+Uses a while-loop to run backward-forward sweep method until voltage error < 0.0001
 
-Initialize the MWTLB-PSA algorithm:
+Calculates voltage at each bus and line currents
 
-Generate initial population of EVCS locations and sizes.
+Iteratively updates bus voltages
 
-For each iteration:
+🔻 Part 6: Calculate Real Power Loss
+matlab
+Copy
+Edit
+Rp = abs(Iline.^2).*Rpu;  % power loss per line
+rp = sum(abs(Rp));        % total power loss
+Plosskw = rp * 100000;    % convert to kW
+obj2 = 1 - (202.7012 ./ Plosskw); % normalize with base loss
+✅ This gives a power loss index — lower power loss gives better performance.
 
-Evaluate fitness using MOF.
+🎯 Part 7: Final Objective Function
+matlab
+Copy
+Edit
+w1 = 0.2;        % weight for EVCCI (user cost)
+w2 = 1 - w1;     % weight for RPLI (power loss)
+obj = (w1 * obj1) + (w2 * obj2);  % weighted multi-objective value
+✅ The lower the obj, the better the combined result of low power loss and low EV user cost.
 
-Update solution using hybrid WTLBO + PSO rules.
-
-Stop when convergence criteria met.
-
-Output optimal EVCS locations, capacities, and corresponding:
-
-APL
-
-EVCCI
-
-Minimum voltage
-
-### Case 2 – DG Placement After EVCS
-Goal: Improve voltage profile and reduce power loss after EVCS are placed.
-
-Steps:
-
-Use optimal EVCS locations from Case 1.
-
-Initialize the MWTLB-PSA for DG placement.
-
-Define limits for DG sizes and power constraints.
-
-Optimize:
-
-DG locations and sizes.
-
-Combined MOF with EVCCI and APLI.
-
-Update load flow with both EVCS and DG data.
-
-Record:
-
-Reduced APL and RPL
-
-Improved voltage profile
-
-EVCCI remains same
-
-### Case 3 – Simultaneous Placement of EVCS and DG
-Goal: Jointly optimize the placement and sizing of EVCS and DGs for best performance.
-
-Steps:
-
-Load distribution and road network data.
-
-Set constraints for:
-
-EVCS capacities, limits
-
-DG size limits
-
-Voltage and power balance
-
-Initialize MWTLB-PSA with mixed population (EVCS + DG).
-
-Evaluate MOF with both EVCCI and APLI.
-
-Run the algorithm until convergence.
-
-Output:
-
-Best EVCS and DG placements
-
-APL, RPL, EVCCI
-
-Minimum bus voltage
-
-Installation cost
+💡 Summary of What This Code Does:
+Component	Purpose
+pv input	Contains locations and ratings for DG and EVCS
+obj1	EV Consumer Cost Index (minimize inconvenience)
+obj2	Power Loss Index (minimize real power losses)
+Load Flow	Calculates bus voltages and line flows
+obj output	Combined cost function using weights (w1, w2)
