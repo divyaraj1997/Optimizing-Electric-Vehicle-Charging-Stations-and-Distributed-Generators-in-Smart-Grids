@@ -101,7 +101,7 @@ Slightly higher computation time for large networks due to dual-phase optimizati
 Designed for radial distribution networks (RDN) – extension to meshed systems requires further work.
 
 
-#### Algorithm for All Cases (Step-by-Step)
+## Algorithm for All Cases (Step-by-Step)
 ### Base Case – No EVCS or DG
 # Goal: Analyze the network performance without any charging stations or distributed generation.
 Steps:
