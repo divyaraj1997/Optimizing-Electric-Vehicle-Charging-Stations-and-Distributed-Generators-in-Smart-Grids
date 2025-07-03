@@ -38,15 +38,11 @@ dmax = evd(:,4);   % max travel distance to EVCS
 matlab
 Copy
 Edit
-evucimin = dmin(evloc(:,1))*nev(evloc(:,1))*0.219*87700 + ...
-           dmin(evloc(:,2))*nev(evloc(:,2))*0.219*87700 + ...
-           dmin(evloc(:,3))*nev(evloc(:,3))*0.219*87700 + ...
-           dmin(evloc(:,4))*nev(evloc(:,4))*0.219*87700;
+evucimin = dmin(evloc(:,1))*nev(evloc(:,1))+...
+           dmin(evloc(:,4))*nev(evloc(:,4));
 
-evucimax = dmax(evloc(:,1))*nev(evloc(:,1))*0.219*87700 + ...
-           dmax(evloc(:,2))*nev(evloc(:,2))*0.219*87700 + ...
-           dmax(evloc(:,3))*nev(evloc(:,3))*0.219*87700 + ...
-           dmax(evloc(:,4))*nev(evloc(:,4))*0.219*87700;
+evucimax = dmax(evloc(:,1))*nev(evloc(:,1)) + ...
+           dmax(evloc(:,4))*nev(evloc(:,4));
 
 obj1 = evucimin ./ evucimax;  % normalized consumer inconvenience index
 📌 This gives us how inconvenient (cost-wise) it is for EV users to reach a charging station.
@@ -69,10 +65,8 @@ BD(loc(:,i),3) = BD(loc(:,i),3) - imag(rat(:,i));  % reduce reactive demand
 matlab
 Copy
 Edit
-BD(evloc(1,1),2) = BD(evloc(1,1),2) + 345.6;
-BD(evloc(1,2),2) = BD(evloc(1,2),2) + 400;
-BD(evloc(1,3),2) = BD(evloc(1,3),2) + 115.2;
-BD(evloc(1,4),2) = BD(evloc(1,4),2) + 230.4;
+BD(evloc(1,1),2) = BD(evloc(1,1),2);+...
+BD(evloc(1,4),2) = BD(evloc(1,4),2);
 ✅ This means you're simulating both DG generation and EVCS loads in the system.
 
 📐 Part 4: Convert to Per Unit System (PU)
@@ -103,15 +97,13 @@ Edit
 Rp = abs(Iline.^2).*Rpu;  % power loss per line
 rp = sum(abs(Rp));        % total power loss
 Plosskw = rp * 100000;    % convert to kW
-obj2 = 1 - (202.7012 ./ Plosskw); % normalize with base loss
+obj2 = 1 - (Plosskw base/ Plosskw); % normalize with base loss
 ✅ This gives a power loss index — lower power loss gives better performance.
 
 🎯 Part 7: Final Objective Function
 matlab
 Copy
 Edit
-w1 = 0.2;        % weight for EVCCI (user cost)
-w2 = 1 - w1;     % weight for RPLI (power loss)
 obj = (w1 * obj1) + (w2 * obj2);  % weighted multi-objective value
 ✅ The lower the obj, the better the combined result of low power loss and low EV user cost.
 
