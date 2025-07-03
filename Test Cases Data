@@ -1,1 +1,43 @@
+This is data for a 33-bus power system network. It shows the electrical parameters between buses, including resistance (R), reactance (X), and impedance (Z) in per unit (pu).
+It also lists the active (kW) and reactive (kVAR) power loads at each bus.
+This data is used to analyze and simulate power flow in the electrical grid for planning and operation purposes.
+R (pu): Resistance per unit of the line between buses, X (pu): Reactance per unit of the line, Z (pu): Impedance per unit (likely magnitude or calculated from R and X)
+, Load kW/kVAR: Active and reactive power load at the “To” bus.
 
+
+
+from bus	to bus	Rpu	Xpu	Z pu	 	load	 
+					 	kw	kvar	 
+1	2	0.0575	0.0293	0.064535	 	100	60	 
+2	3	0.3076	0.1567	0.345214	 	90	40	 
+3	4	0.2284	0.1163	0.256305	 	120	80	 
+4	5	0.2378	0.1211	0.26686	 	60	30	 
+5	6	0.511	0.4411	0.675048	 	60	20	 
+6	7	0.1168	0.3861	0.40338	 	200	100	 
+7	8	0.4439	0.1467	0.467513	 	200	100	 
+8	9	0.6426	0.4617	0.791266	 	60	20	 
+9	10	0.6514	0.4617	0.798429	 	60	20	 
+10	11	0.1227	0.0406	0.129243	 	45	30	 
+11	12	0.2336	0.0772	0.246026	 	60	35	 
+12	13	0.9159	0.7206	1.165391	 	60	35	 
+13	14	0.3379	0.4448	0.558591	 	120	80	 
+14	15	0.3687	0.3282	0.493614	 	60	10	 
+15	16	0.4656	0.34	0.576527	 	60	20	 
+16	17	0.8042	1.0738	1.34156	 	60	20	 
+17	18	0.4567	0.3581	0.580354	 	90	40	 
+2	19	0.1023	0.0976	0.14139	 	90	40	 
+19	20	0.9385	0.8457	1.263325	 	90	40	 
+20	21	0.2555	0.2985	0.392915	 	90	40	 
+21	22	0.4423	0.5848	0.733226	 	90	40	 
+3	23	0.2815	0.1924	0.340969	 	90	50	 
+23	24	0.5603	0.4424	0.7139	 	420	200	 
+24	25	0.559	0.4374	0.709789	 	420	200	 
+6	26	0.1267	0.0645	0.142173	 	60	25	 
+26	27	0.1773	0.0903	0.198971	 	60	25	 
+27	28	0.6607	0.5826	0.880879	 	60	20	 
+28	29	0.5018	0.4371	0.665477	 	120	70	 
+29	30	0.3166	0.1613	0.355321	 	200	600	 
+30	31	0.608	0.6008	0.854766	 	150	70	 
+31	32	0.1937	0.2258	0.297498	 	210	100	 
+32	33	0.2128	0.3308	0.393335	 	60	40	 
+				17.24379	 	 	 	 
