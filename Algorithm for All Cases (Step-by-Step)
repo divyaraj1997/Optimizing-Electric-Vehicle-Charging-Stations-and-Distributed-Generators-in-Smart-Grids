@@ -1,43 +1,35 @@
 MATLAB code explained in simple and easy terms step-by-step with what each part does.
 
-✅ Function Name and Inputs
-matlab
-Copy
-Edit
+##  Function Name and Inputs
+matlab Copy Edit
 function [obj] = evuci1(pv)
 Function name: evuci1
 
 Input: pv — a matrix where:
 
-pv(:,1:4) = location of EVCS and DGs (rounded to nearest integer)
-
-pv(:,5:8) = size (rating) of DGs
+pv(:,1:8) = location of EVCS and DGs (rounded to nearest integer)
 
 📍Part 1: Initialization
-matlab
-Copy
-Edit
+matlab Copy Edit
 ns = size(pv,1);  % number of candidate solutions (rows in input)
 obj = zeros(ns,1); % initialize the objective value array
 best_w1 = zeros(ns,1); % (not used now)
 best_w2 = zeros(ns,1); % (not used now)
 
-evloc = round(pv(:,1:4)); % EVCS locations
-loc = round(pv(:,1:4));   % DG locations
-rat = round(pv(:,5:8));   % DG ratings
+evloc = round(pv)); % EVCS locations
+loc = round(pv);   % DG locations
+rat = round(pv));   % DG ratings
+
 🚗 Part 2: EV Consumer Cost Index (EVCCI) Calculation
-matlab
-Copy
-Edit
+matlab Copy Edit
+
 evd = load('EV_data.m');  % load EV demand data
 rn = evd(:,1);     % road node numbers
 nev = evd(:,2);    % number of EVs at each node
 dmin = evd(:,3);   % min travel distance to EVCS
 dmax = evd(:,4);   % max travel distance to EVCS
 ➕ Then calculates:
-matlab
-Copy
-Edit
+matlab Copy Edit
 evucimin = dmin(evloc(:,1))*nev(evloc(:,1))+...
            dmin(evloc(:,4))*nev(evloc(:,4));
 
@@ -48,31 +40,27 @@ obj1 = evucimin ./ evucimax;  % normalized consumer inconvenience index
 📌 This gives us how inconvenient (cost-wise) it is for EV users to reach a charging station.
 
 ⚡ Part 3: Real Power Loss Index (RPLI)
-matlab
-Copy
-Edit
+matlab Copy Edit
+
 LD = load('linedata33.m');  % line data (from bus, to bus, resistance, reactance)
 BD = load('busdata_33.m');  % bus data (bus no, Pd, Qd)
+
 ➕ Modify bus data to add DG generation at selected buses:
-matlab
-Copy
-Edit
+matlab Copy Edit
+
 BD(loc(:,i),2) = BD(loc(:,i),2) - real(rat(:,i));  % reduce real demand
 BD(loc(:,i),3) = BD(loc(:,i),3) - imag(rat(:,i));  % reduce reactive demand
 (Repeated for i = 1 to 4)
 
-🔌 Add EVCS Load:
-matlab
-Copy
-Edit
+🔌 Add EVCS Load: matlab Copy Edit
+
 BD(evloc(1,1),2) = BD(evloc(1,1),2);+...
 BD(evloc(1,4),2) = BD(evloc(1,4),2);
-✅ This means you're simulating both DG generation and EVCS loads in the system.
 
-📐 Part 4: Convert to Per Unit System (PU)
-matlab
-Copy
-Edit
+✅ This means you're simulating both DG generation and EVCS loads in the system.
+ 📐 Part 4: Convert to Per Unit System (PU)
+matlab Copy Edit
+
 MVAb = 100;
 KVb = 12.66;
 Zb = (KVb^2)/MVAb;
@@ -86,24 +74,21 @@ Qpu = Qd/(1000 * MVAb);
 🔄 Part 5: Load Flow using Backward/Forward Sweep
 Uses a while-loop to run backward-forward sweep method until voltage error < 0.0001
 
-Calculates voltage at each bus and line currents
-
-Iteratively updates bus voltages
+Calculates voltage at each bus and line currents . Iteratively updates bus voltages
 
 🔻 Part 6: Calculate Real Power Loss
-matlab
-Copy
-Edit
+matlab Copy Edit
+
 Rp = abs(Iline.^2).*Rpu;  % power loss per line
 rp = sum(abs(Rp));        % total power loss
 Plosskw = rp * 100000;    % convert to kW
 obj2 = 1 - (Plosskw base/ Plosskw); % normalize with base loss
+
 ✅ This gives a power loss index — lower power loss gives better performance.
 
 🎯 Part 7: Final Objective Function
-matlab
-Copy
-Edit
+matlab Copy Edit
+
 obj = (w1 * obj1) + (w2 * obj2);  % weighted multi-objective value
 ✅ The lower the obj, the better the combined result of low power loss and low EV user cost.
 
