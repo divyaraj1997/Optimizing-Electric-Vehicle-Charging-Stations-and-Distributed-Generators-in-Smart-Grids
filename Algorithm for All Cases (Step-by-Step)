@@ -99,3 +99,114 @@ obj1	EV Consumer Cost Index (minimize inconvenience)
 obj2	Power Loss Index (minimize real power losses)
 Load Flow	Calculates bus voltages and line flows
 obj output	Combined cost function using weights (w1, w2)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% code %%%%%%%%%%%%%%%%%%%%
+clc;
+clear all;
+
+% ---------- Initialization ----------
+j = sqrt(-1);          % complex unit
+wmax = 0.9;            % max inertia weight (PSO)
+wmin = 0.4;            % min inertia weight (PSO)
+c1 = 2;                % cognitive learning factor
+c2 = 2;                % social learning factor
+
+% Define lower and upper bounds for variables
+% First 4: EVCS locations, Next 4: DG sizes (indexes & values)
+lb,ub;
+ns = 100;             % number of particles (solutions)
+nv = size(lb,2);      % number of decision variables
+nite = 100;           % max number of iterations
+tol = 0.001;        % stopping tolerance
+
+% ---------- Random Initialization ----------
+r1 = rand(ns, nv);              % random values for scaling
+pv = round(convert_pv(lb, ub, ns));  % initial population
+fprev = zeros(ns,1);            % store previous fitness
+ite = 1;                        % iteration counter
+alpha = 1;                      % convergence indicator
+
+% ---------- Optimization Loop ----------
+while alpha > tol
+
+    % Evaluate objective function
+    obj = evuci1(pv);                % hybrid objective function (EVCCI + Power Loss)
+    pvobj = [pv obj];                % combine parameters and fitness
+
+    % ------ TEACHER PHASE (TLBO) ------
+    [tpvobj] = teacherh(pvobj, lb, ub);  % teacher phase output
+
+    % ------ PSO INITIALIZATION ------
+    vel = 0.1 .* pv;               % initialize velocities
+    f0 = evuci1(pv);               % initial fitness
+    sol0 = [pv f0];                % store initial solution
+    [fmin0, index0] = min(f0);     % find global best
+    pbest = pv;                    % personal best
+    gbest = pv(index0,:);         % global best
+
+    % ------ PSO UPDATE LOOP ------
+    w = wmax - ((wmax - wmin) * ite / nite);  % update inertia weight
+
+    for i = 1:ns
+        for j = 1:nv
+            vel(i,j) = round(w*vel(i,j) ...
+                        + c1*rand()*(pbest(i,j)-pv(i,j)) ...
+                        + c2*rand()*(gbest(1,j)-pv(i,j)));
+            pv(i,j) = round(pv(i,j) + vel(i,j));
+        end
+    end
+
+    % Boundary check
+    for i = 1:ns
+        for j = 1:nv
+            if pv(i,j) < lb(j) || pv(i,j) > ub(j)
+                pv(i,j) = round(lb(j) + rand() * (ub(j) - lb(j)));
+            end
+        end
+    end
+
+    % ------ PSO FITNESS EVALUATION ------
+    f1 = evuci1(pv);
+    sol1 = [pv f1];
+
+    % Update pbest
+    for i = 1:ns
+        if f1(i) < f0(i)
+            pbest(i,:) = pv(i,:);
+            f0(i) = f1(i);
+        end
+    end
+
+    % Update gbest
+    [fminupd, index] = min(f0);
+    best(ite,:) = fminupd;
+    if fminupd < fmin0
+        gbest = pbest(index,:);
+        fmin0 = fminupd;
+    end
+
+    % ------ MERGE BEST SOLUTIONS FROM TLBO AND PSO ------
+    upd1 = sortrows(tpvobj, 1+nv);      % sort TLBO output by fitness
+    upd2 = sortrows([pbest f0], 1+nv);  % sort PSO output by fitness
+
+    btp = upd1(1:ns/2,:);   % top 50% from TLBO
+    bpso = upd2(1:ns/2,:);  % top 50% from PSO
+
+    finres = [btp; bpso];   % combine both best halves
+
+    % ------ LEARNER PHASE (TLBO) ------
+    [lpvobj] = learner1(finres, lb, ub);   % apply learner phase
+    srt1 = sortrows(lpvobj, 1+nv);         % sort learners
+    obj = srt1(:,1+nv);                    % new objective values
+
+    % ------ CONVERGENCE CHECK ------
+    fpres = obj;
+    alpha = min(abs(fpres - fprev));  % difference from previous iteration
+    fprev = fpres;
+    ite = ite + 1;
+end
+
+% Final best solution after all iterations
+bst = srt1(1,:);
+disp('Best solution:');
+disp(bst);
