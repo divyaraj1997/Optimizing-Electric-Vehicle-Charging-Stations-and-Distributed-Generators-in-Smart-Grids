@@ -6,17 +6,11 @@
 **Manuscript ID:** IEEE LATAM Submission ID: 9630  
 
 **Authors:**  
-- **Divya Bharathi R**  
-  Doctoral Scholar, Department of Electrical and Electronics Engineering  
+- **Divya Bharathi R** 
+- **Venkatakirthiga Murali**  
+  Department of Electrical and Electronics Engineering  
   National Institute of Technology, Tiruchirappalli, India  
-  ✉️ Email: divyabharathi123@gmail.com  
-
-- **Venkatakirthiga Murali (M’13–SM’19)**  
-  Professor, Department of Electrical and Electronics Engineering  
-  National Institute of Technology, Tiruchirappalli, India  
-  ✉️ Email: venkatakirthiga@nitt.edu  
-
----
+  
 
 ## 📘 Overview
 
@@ -148,7 +142,4 @@ The study proposes a **Modified Weighted Teaching-Learning Based PSO Algorithm (
 
 For questions or support in reproducing results:
 
-- **Divya Bharathi R** – divyabharathi123@gmail.com  
-- **Prof. Venkatakirthiga Murali** – venkatakirthiga@nitt.edu  
-
-> 📎 Note: Please ensure that all MATLAB files and datasets are placed in the appropriate folders before running the scripts.
+- **Divya Bharathi R** – 407121005@nitt.edu  
