@@ -1,161 +1,154 @@
 # Optimizing-Electric-Vehicle-Charging-Stations-and-Distributed-Generators-in-Smart-Grids
-Optimizing EV Charging Stations and Distributed Generators in Smart Grids
-## Overview
-This repository provides source code, input datasets, and result outputs for the research work titled "Optimizing Electric Vehicle Charging Stations and Distributed Generators in Smart Grids: A Multi-Objective Meta-Heuristic Approach." This work presents a Modified Weighted Teaching-Learning Based PSO Algorithm (MWTLB-PSA) to optimally place Electric Vehicle Charging Stations (EVCS) and Distributed Generators (DGs) in a coupled distribution and road network.
 
-## Key Features
-Hybrid Optimization Algorithm (MWTLB-PSA): Combines the exploration strength of PSO with the exploitation ability of Weighted Teaching-Learning Based Optimization for superior convergence and global search capability.
+## Manuscript Information
 
-Joint Planning of EVCS and DGs: Simultaneous placement considering power system efficiency and consumer travel behavior in urban road networks.
+**Title:** Optimizing Electric Vehicle Charging Stations and Distributed Generators in Smart Grids: A Multi-Objective Meta-Heuristic Approach  
+**Manuscript ID:** IEEE LATAM Submission ID: 9630  
 
-Consumer Cost Index (EVCCI): Introduces a new metric that quantifies user inconvenience in terms of distance and energy consumed to reach EVCS.
+**Authors:**  
+- **Divya Bharathi R**  
+  Doctoral Scholar, Department of Electrical and Electronics Engineering  
+  National Institute of Technology, Tiruchirappalli, India  
+  ✉️ Email: divyabharathi123@gmail.com  
 
-Active Power Loss Index (APLI): Measures power loss reduction after integrating EVCS and DG.
+- **Venkatakirthiga Murali (M’13–SM’19)**  
+  Professor, Department of Electrical and Electronics Engineering  
+  National Institute of Technology, Tiruchirappalli, India  
+  ✉️ Email: venkatakirthiga@nitt.edu  
 
-Spatially Coupled Network: Integrates IEEE 33-bus distribution system with a 25-node realistic urban road network.
+---
 
-##  Files Description
-yaml
-Copy
-Edit
-/scripts/ – MATLAB code used in simulation
+## 📘 Overview
 
-run_MWTLB_PSA.m          : Main script for optimization
-load_flow_analysis.m     : Backward/forward sweep load flow
-compute_EVCCI_APLI.m     : Calculates indices and objective function
-compare_algorithms.m     : Compares MWTLB-PSA with PSO & HTLBO-PSO
+This repository provides MATLAB source code, input datasets, and simulation results for the research work titled:  
+**"Optimizing Electric Vehicle Charging Stations and Distributed Generators in Smart Grids: A Multi-Objective Meta-Heuristic Approach."**
 
-/data/ – Input data files
+The study proposes a **Modified Weighted Teaching-Learning Based PSO Algorithm (MWTLB-PSA)** to determine the optimal location and size of Electric Vehicle Charging Stations (EVCS) and Distributed Generators (DGs) in an integrated radial distribution and road network.
 
-ieee_33_rdn.mat          : 33-bus RDN data
-road_network_25.mat      : 25-node road network data
-EV_demand_data.mat       : Demand profile and distance matrix
+---
 
-/results/ – Output from simulations
+## 🧠 Key Features
 
-evcs_locations_case1.csv
-evcs_dg_case3_output.csv
-voltage_profiles_plot.png
-loss_comparison_chart.png
-economic_analysis_chart.png
+- **Hybrid Optimization Algorithm (MWTLB-PSA):** Combines PSO and Weighted TLBO for better convergence.
+- **Multi-Objective Planning:** Minimizes power loss and EV consumer travel cost (EVCCI).
+- **Power-Loss Index (APLI):** Captures power system improvement post-integration.
+- **Spatial Coupling:** Combines IEEE 33-bus RDN with a realistic 25-node road network.
+- **Sensitivity Analysis:** Explores the impact of objective weights on the outcome.
 
-## Tested Scenarios
-This study tested three major planning scenarios plus a base case:
+---
 
-Base Case – No EVCS or DG units.
+## 📁 Files Description
 
-Case 1 – Only EVCS optimally placed (based on consumer travel distance).
+### `/scripts/` – MATLAB Simulation Scripts
+- `run_MWTLB_PSA.m` – Main execution file for running all scenarios
+- `load_flow_analysis.m` – Backward/forward load flow calculation
+- `compute_EVCCI_APLI.m` – Computes EVCCI and APLI values
+- `compare_algorithms.m` – Compares MWTLB-PSA vs. PSO & HTLBO-PSO
 
-Case 2 – EVCS with added DG units to reduce voltage drop and losses.
+### `/data/` – Input Data Files
+- `ieee_33_rdn.mat` – IEEE 33-bus radial distribution system
+- `road_network_25.mat` – 25-node road network graph
+- `EV_demand_data.mat` – EV demand profile and distance matrix
 
-Case 3 – Simultaneous placement of EVCS and DGs using MWTLB-PSA.
+### `/results/` – Output Files
+- `evcs_locations_case1.csv` – Optimal EVCS locations (Case 1)
+- `evcs_dg_case3_output.csv` – EVCS and DGs locations (Case 3)
+- `voltage_profiles_plot.png` – Voltage comparison across buses
+- `loss_comparison_chart.png` – Active power loss summary
+- `economic_analysis_chart.png` – Cost comparison between algorithms
 
-## ⚙️ Key Specifications
-Distribution system: IEEE 33-bus system
+---
 
-Road network: 25-node urban layout
+## 🔬 Tested Scenarios
 
-EV population: 238 vehicles
+- **Base Case** – No EVCS or DGs
+- **Case 1** – EVCS only (based on travel cost)
+- **Case 2** – DGs added after EVCS
+- **Case 3** – Simultaneous placement of EVCS and DGs using MWTLB-PSA
 
-Voltage level: 11 kV
+---
 
-Power base: 100 MVA
+## ⚙️ System Specifications
 
-##  Results Summary
-Case	Method	Active Power Loss (APL)	Minimum Voltage	EV Consumer Cost Index (EVCCI)
-Case 1	MWTLB-PSA	252.71 kW	0.9048 pu	0.5425
-Case 2	MWTLB-PSA	71.01 kW	0.9825 pu	0.5425
-Case 3	MWTLB-PSA	57.75 kW	0.9887 pu	0.3958
+- **Distribution System:** IEEE 33-bus RDN  
+- **Road Network:** 25-node urban layout  
+- **EV Population:** 238 vehicles  
+- **Voltage Level:** 11 kV  
+- **Power Base:** 100 MVA  
 
-##  MWTLB-PSA consistently outperformed other algorithms like PSO and HTLBO-PSO in all scenarios.
+---
 
-# Economic and Sensitivity Analysis
-Installation cost of EVCS:
+## 📊 Results Summary
 
-MWTLB-PSA: $2.95 million
+| Case     | Method      | Active Power Loss | Min Voltage | EVCCI     |
+|----------|-------------|-------------------|-------------|-----------|
+| Case 1   | MWTLB-PSA   | 252.71 kW         | 0.9048 pu   | 0.5425    |
+| Case 2   | MWTLB-PSA   | 71.01 kW          | 0.9825 pu   | 0.5425    |
+| Case 3   | MWTLB-PSA   | 57.75 kW          | 0.9887 pu   | 0.3958    |
 
-HTLBO-PSO: $3.14 million
+---
 
-PSO: $3.38 million
+## 💰 Economic and Sensitivity Analysis
 
-## Sensitivity analysis confirmed optimal weights for the multi-objective function:
+- **Installation Costs:**
+  - MWTLB-PSA: $2.95 million
+  - HTLBO-PSO: $3.14 million
+  - PSO: $3.38 million
 
-EVCCI weight (w₁): 0.2
+- **Optimal Objective Weights:**
+  - EVCCI Weight (w₁): 0.2
+  - APLI Weight (w₂): 0.8
 
-APLI weight (w₂): 0.8
+---
 
-## Applications
-This method is useful in:
+## 🧮 Step-by-Step Algorithm (By Case)
 
-Urban EV infrastructure planning
-
-Smart grid design and control
-
-Renewable integration scenarios
-
-Military and critical grid resilience systems
-
-## Limitations
-Slightly higher computation time for large networks due to dual-phase optimization in each iteration.
-
-Designed for radial distribution networks (RDN) – extension to meshed systems requires further work.
-
-
-## Algorithm for All Cases (Step-by-Step)
 ### Base Case – No EVCS or DG
-# Goal: Analyze the network performance without any charging stations or distributed generation.
-Steps:
-Load the IEEE 33-bus distribution network data.
-Perform load flow analysis using the backward/forward sweep method.
-Record:
-Active Power Loss (APL)
-Reactive Power Loss (RPL)
-Minimum Bus Voltage
+1. Load IEEE 33-bus network
+2. Perform load flow
+3. Record APL, RPL, and minimum voltage
 
 ### Case 1 – EVCS Placement Only
-# Goal: Minimize power loss and EV travel cost by placing only EV Charging Stations.
-Steps:
-Load both distribution network and road network data.
-Define the Multi-Objective Function (MOF) using:
-EV Consumer Cost Index (EVCCI)
-Active Power Loss Index (APLI)
-Initialize the MWTLB-PSA algorithm:
-Generate initial population of EVCS locations and sizes.
-For each iteration:
-Evaluate fitness using MOF.
-Update solution using hybrid WTLBO + PSO rules.
-Stop when convergence criteria met.
-Output optimal EVCS locations, capacities, and corresponding:
-APL
-EVCCI
-Minimum voltage
+1. Load distribution and road network
+2. Define MOF with EVCCI & APLI
+3. Initialize and run MWTLB-PSA
+4. Output EVCS data, APL, EVCCI, voltage
+
 ### Case 2 – DG Placement After EVCS
-# Goal: Improve voltage profile and reduce power loss after EVCS are placed.
-Steps:
-Use optimal EVCS locations from Case 1.
-Initialize the MWTLB-PSA for DG placement.
-Define limits for DG sizes and power constraints.
-Optimize:
-DG locations and sizes.
-Combined MOF with EVCCI and APLI.
-Update load flow with both EVCS and DG data.
-# Record:
-Reduced APL and RPL
-Improved voltage profile
-EVCCI remains same
-### Case 3 – Simultaneous Placement of EVCS and DG
-# Goal: Jointly optimize the placement and sizing of EVCS and DGs for best performance.
-Steps:
-Load distribution and road network data.
-Set constraints for:
-EVCS capacities, limits
-DG size limits
-Voltage and power balance
-Initialize MWTLB-PSA with mixed population (EVCS + DG).
-Evaluate MOF with both EVCCI and APLI.
-Run the algorithm until convergence.
-# Output:
-Best EVCS and DG placements
-APL, RPL, EVCCI
-Minimum bus voltage
-Installation cost
+1. Use EVCS results from Case 1
+2. Initialize MWTLB-PSA for DG sizing
+3. Update load flow
+4. Record improved metrics
+
+### Case 3 – Simultaneous EVCS and DG
+1. Load all datasets
+2. Set constraints (capacities, voltage)
+3. Optimize mixed population
+4. Output best solution with all metrics
+
+---
+
+## 📌 Applications
+
+- Urban EV infrastructure planning  
+- Smart grid and distribution system design  
+- Renewable and EV integration studies  
+- Resilient energy planning for critical networks
+
+---
+
+## ⚠️ Limitations
+
+- Slightly higher runtime for large networks due to dual-phase optimization
+- Designed for radial networks; extension to meshed networks requires further study
+
+---
+
+## 📧 Contact
+
+For questions or support in reproducing results:
+
+- **Divya Bharathi R** – divyabharathi123@gmail.com  
+- **Prof. Venkatakirthiga Murali** – venkatakirthiga@nitt.edu  
+
+> 📎 Note: Please ensure that all MATLAB files and datasets are placed in the appropriate folders before running the scripts.
