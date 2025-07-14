@@ -142,4 +142,4 @@ The study proposes a **Modified Weighted Teaching-Learning Based PSO Algorithm (
 
 For questions or support in reproducing results:
 
-- **Divya Bharathi R** – 407121005@nitt.edu  
+- **Divya Bharathi Raj** – 407121005@nitt.edu  
