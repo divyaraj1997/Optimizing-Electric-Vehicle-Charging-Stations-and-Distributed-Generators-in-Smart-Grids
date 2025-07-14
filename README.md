@@ -6,7 +6,7 @@
 **Manuscript ID:** IEEE LATAM Submission ID: 9630  
 
 **Authors:**  
-- **Divya Bharathi R** 
+- **Divya Bharathi Raj** 
 - **Venkatakirthiga Murali**  
   Department of Electrical and Electronics Engineering  
   National Institute of Technology, Tiruchirappalli, India  
