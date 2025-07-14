@@ -3,7 +3,7 @@
 ## Manuscript Information
 
 **Title:** Optimizing Electric Vehicle Charging Stations and Distributed Generators in Smart Grids: A Multi-Objective Meta-Heuristic Approach  
-**Manuscript ID:** IEEE LATAM Submission ID: 9630  
+**Manuscript ID:** IEEE Latin America Transactions Submission ID: 9630  
 
 **Authors:**  
 - **Divya Bharathi Raj** 
